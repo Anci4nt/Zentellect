@@ -1,15 +1,20 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-export async function PATCH(req: Request, { params }: { params: { id: string } }) {
-  const { endedAt } = await req.json()
+export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+  try {
+    const { endedAt } = await req.json()
 
-  const updated = await prisma.studySession.update({
-    where: { id: parseInt(params.id) },
-    data: { endedAt: new Date(endedAt) },
-  })
+    const session = await prisma.studySession.update({
+      where: { id: Number(params.id) },
+      data: { endedAt: new Date(endedAt) },
+    })
 
-  return NextResponse.json({ success: true })
+    return NextResponse.json({ session })
+  } catch (err) {
+    console.error('Error ending session:', err)
+    return NextResponse.json({ error: 'Failed to end session' }, { status: 500 })
+  }
 }

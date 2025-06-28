@@ -9,11 +9,15 @@ export default function Timer() {
   const [timeLeft, setTimeLeft] = useState(0)
   const [isRunning, setIsRunning] = useState(false)
   const [hasStarted, setHasStarted] = useState(false)
+  const [sessionId, setSessionId] = useState<string | null>(null)
 
   useEffect(() => {
     let timer: NodeJS.Timeout
     if (isRunning && timeLeft > 0) {
       timer = setTimeout(() => setTimeLeft((t) => t - 1), 1000)
+    } else if (isRunning && timeLeft === 0) {
+      endSession()
+      setIsRunning(false)
     }
     return () => clearTimeout(timer)
   }, [timeLeft, isRunning])
@@ -21,22 +25,45 @@ export default function Timer() {
   const format = (sec: number) =>
     `${String(Math.floor(sec / 60)).padStart(2, '0')}:${String(sec % 60).padStart(2, '0')}`
 
-  const startTimer = () => {
+  const startTimer = async () => {
     if (!hasStarted) {
       setTimeLeft(goal * 60)
       setHasStarted(true)
+      setIsRunning(true)
+
+      // ✅ Create a session in DB
+      const res = await fetch('/api/sessions', {
+        method: 'POST',
+        body: JSON.stringify({ startedAt: new Date().toISOString() }),
+        headers: { 'Content-Type': 'application/json' },
+      })
+      const data = await res.json()
+      setSessionId(data.session.id)
+    } else {
+      setIsRunning(true)
     }
-    setIsRunning(true)
+  }
+
+  const endSession = async () => {
+    if (sessionId) {
+      await fetch(`/api/sessions/${sessionId}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ endedAt: new Date().toISOString() }),
+        headers: { 'Content-Type': 'application/json' },
+      })
+    }
   }
 
   const stopTimer = () => {
     setIsRunning(false)
+    endSession()
   }
 
   const resetTimer = () => {
     setTimeLeft(0)
     setIsRunning(false)
     setHasStarted(false)
+    setSessionId(null)
   }
 
   return (
