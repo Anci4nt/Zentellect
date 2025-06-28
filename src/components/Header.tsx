@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 
 const navLinks = [
   { label: 'AI Chat', href: '#' },
-  { label: 'Subjects', href: '#' },
   { label: 'Study Timer', href: '#', active: true },
   { label: 'Notes', href: '#' },
 ]
@@ -18,12 +17,12 @@ export default function Header() {
   }, [])
 
   return (
-    <div className="max-w-6xl mx-auto mt-10 px-6">
-      <div className="bg-white shadow-md rounded-[2rem] py-4 px-6 flex flex-col md:flex-row items-center justify-between transition-all duration-700 ease-out">
+    <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md shadow-md">
+      <div className="max-w-6xl mx-auto px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-4 transition-all duration-700 ease-out">
         
         {/* Logo & Title */}
-        <div className="flex items-center gap-3 mb-4 md:mb-0">
-          <div className="w-10 h-10 bg-green-800 text-white rounded-lg flex items-center justify-center text-lg font-bold">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-green-800 text-white rounded-xl flex items-center justify-center text-lg font-bold shadow-sm">
             🧠
           </div>
           <div>
@@ -33,18 +32,20 @@ export default function Header() {
         </div>
 
         {/* Nav */}
-        <nav className="flex gap-6 text-sm font-medium text-gray-600">
+        <nav className="flex gap-4 md:gap-6 text-sm font-medium">
           {navLinks.map((link, i) => (
             <a
               key={link.label}
               href={link.href}
-              className={`transition-opacity duration-700 ease-out transform ${
-                mounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'
-              } delay-[${i * 100}ms] ${
-                link.active
-                  ? 'text-orange-600 border-b-2 border-orange-500 pb-1'
-                  : 'hover:text-green-700'
-              }`}
+              className={`relative px-3 py-1 rounded-lg transition-all duration-300 ease-in-out transform 
+                ${
+                  mounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'
+                } delay-[${i * 100}ms] 
+                ${
+                  link.active
+                    ? 'bg-orange-100 text-orange-600 font-semibold'
+                    : 'text-gray-600 hover:text-green-700 hover:bg-green-100 hover:scale-105'
+                }`}
             >
               {link.label}
             </a>
@@ -52,10 +53,10 @@ export default function Header() {
         </nav>
 
         {/* Online Badge */}
-        <div className="hidden md:block ml-6 text-green-600 font-semibold text-sm">
-          ● Online
+        <div className="hidden md:flex items-center gap-1 text-green-600 font-semibold text-sm">
+          <span className="text-lg">●</span> Online
         </div>
       </div>
-    </div>
+    </header>
   )
 }
