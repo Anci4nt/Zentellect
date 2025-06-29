@@ -42,23 +42,19 @@ export default function Chatbot() {
 
 
   return (
-    <div className="min-h-screen px-6 py-8 bg-white  text-gray-900 dark:text-white transition-colors duration-300 flex flex-col">
-      
-
+    <div className="min-h-screen px-6 py-10 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300 flex flex-col">
       {/* CHAT AREA */}
-      <div className="flex-1 overflow-y-auto mb-8 h-[300px] p-4 bg-gray-300  rounded-xl space-y-4">
+      <div className="flex-1 overflow-y-auto mb-10 h-[300px] p-5 bg-white dark:bg-gray-800 rounded-2xl space-y-4 border border-gray-200 dark:border-gray-700 shadow">
         {messages.map((msg, i) => (
           <div
             key={i}
-            className={`flex ${
-              msg.role === 'user' ? 'justify-end' : 'justify-start'
-            }`}
+            className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
           >
             <div
-              className={`max-w-xs px-4 py-2 rounded-lg whitespace-pre-wrap ${
+              className={`max-w-sm px-4 py-2 rounded-2xl whitespace-pre-wrap text-sm leading-relaxed ${
                 msg.role === 'user'
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100'
               }`}
             >
               {msg.content}
@@ -69,36 +65,36 @@ export default function Chatbot() {
 
       {/* INPUT AREA AT BOTTOM */}
       <form
-  onSubmit={(e) => {
-    e.preventDefault()
-    handleSend()
-  }}
-  className="space-y-4"
->
-  <input
-    type="text"
-    placeholder="Enter topic"
-    value={topic}
-    onChange={(e) => setTopic(e.target.value)}
-    className="w-full p-3 rounded-lg bg-gray-200 dark:bg-gray-400 text-black dark:text-white"
-  />
+        onSubmit={(e) => {
+          e.preventDefault()
+          handleSend()
+        }}
+        className="space-y-4 max-w-xl mx-auto w-full"
+      >
+        <input
+          type="text"
+          placeholder="Enter topic"
+          value={topic}
+          onChange={(e) => setTopic(e.target.value)}
+          className="w-full p-3 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
 
-  <textarea
-    placeholder="Paste your notes"
-    value={notes}
-    onChange={(e) => setNotes(e.target.value)}
-    className="w-full h-32 p-3 rounded-lg bg-gray-200 dark:bg-gray-400 text-black dark:text-white resize-none"
-  />
+        <textarea
+          placeholder="Paste your notes"
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          className="w-full h-32 p-3 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
 
-  <button
-    type="submit"
-    className="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition"
-  >
-    Submit to AI
-  </button>
-</form>
-
-      </div>
-    
+        <div className="text-center">
+          <button
+            type="submit"
+            className="bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition shadow-md"
+          >
+            Submit to AI
+          </button>
+        </div>
+      </form>
+    </div>
   )
 }

@@ -99,7 +99,9 @@ export default function NotesPage() {
   }
 
   const filteredNotes = notes.filter((note) =>
-    note.title.toLowerCase().includes(search.toLowerCase())
+    [note.title, note.tag, note.content].some((field) =>
+      field.toLowerCase().includes(search.toLowerCase())
+    )
   )
   const starredNotes = filteredNotes.filter((note) => note.starred)
   const normalNotes = filteredNotes.filter((note) => !note.starred)
@@ -153,7 +155,7 @@ export default function NotesPage() {
         <input
           type="text"
           placeholder="Search your notes..."
-          className="w-full max-w-xl p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-400 transition"
+          className="w-full max-w-xl p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 shadow-sm bg-white"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
