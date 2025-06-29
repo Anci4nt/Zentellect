@@ -3,15 +3,17 @@
 import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { useState } from "react";
 import { auth, googleSignUp } from "../../lib/firebase";
+import { useTheme } from '@/contexts/ThemeContext'
 
 export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const { isDark } = useTheme()
   // Email Sign-Up
   const signUpWithEmail = async (email, password) => {
+    
     setError("");
     setLoading(true);
     try {
@@ -36,7 +38,7 @@ export default function Signup() {
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white dark:bg-gray-900 rounded-xl shadow-md space-y-5">
+    <div className="max-w-md mx-auto p-6 mt-5 bg-white dark:bg-gray-900 rounded-xl shadow-md space-y-5">
       <h2 className="text-2xl font-bold text-center text-gray-800 dark:text-white">Sign Up</h2>
       {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 

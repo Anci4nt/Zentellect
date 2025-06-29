@@ -27,7 +27,7 @@ export default function EmailLogin() {
   return (
     <form
       onSubmit={login}
-      className="max-w-md mx-auto p-6 bg-white dark:bg-gray-900 rounded-xl shadow-md space-y-5"
+      className="max-w-md mx-auto mt-5 p-6  bg-gray-900 rounded-xl shadow-md space-y-5"
     >
       <h2 className="text-2xl font-bold text-center text-gray-800 dark:text-white">Email Login</h2>
       {error && <p className="text-red-500 text-sm text-center">{error}</p>}
