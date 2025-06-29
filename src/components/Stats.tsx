@@ -31,22 +31,33 @@ export default function Stats() {
   }, [])
 
   return (
-    <div className={`rounded-xl p-6 shadow-sm transition-colors duration-300 ${
-      isDark ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'
-    }`}>
-      <h3 className="font-semibold text-lg mb-4">🏆 Study Stats</h3>
-      <div className="space-y-2 text-sm">
-        <div className="flex justify-between">
-          <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>Sessions Completed Today</span>
-          <span className="font-medium">{stats.totalSessions}</span>
+    <div
+      className={`rounded-xl p-4 sm:p-6 shadow-sm transition-colors duration-300 ${
+        isDark ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'
+      }`}
+    >
+      <h3 className="font-semibold text-base sm:text-lg mb-4">🏆 Study Stats</h3>
+
+      <div className="space-y-3 text-sm sm:text-base">
+        <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
+          <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>
+            Sessions Completed Today
+          </span>
+          <span className="font-medium text-end sm:text-left">{stats.totalSessions}</span>
         </div>
-        <div className="flex justify-between">
+
+        <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
           <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>Current Session</span>
-          <span className="font-medium">{formatTime(stats.currentDuration)}</span>
+          <span className="font-medium text-end sm:text-left">
+            {formatTime(stats.currentDuration)}
+          </span>
         </div>
-        <div className="flex justify-between">
-          <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>Total Study Time Today</span>
-          <span className="font-medium">{formatTime(stats.totalTime)}</span>
+
+        <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
+          <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>
+            Total Study Time Today
+          </span>
+          <span className="font-medium text-end sm:text-left">{formatTime(stats.totalTime)}</span>
         </div>
       </div>
     </div>
