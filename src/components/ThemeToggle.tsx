@@ -1,11 +1,18 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Sun, Moon } from 'lucide-react'
 import { useTheme } from '@/contexts/ThemeContext'
 
 const ThemeToggle = () => {
   const { isDark, toggleTheme } = useTheme()
+const [mounted, setMounted] = useState(false);
+
+useEffect(() => {
+  setMounted(true);
+}, []);
+
+if (!mounted) return null;
 
   return (
     <div className="flex items-center gap-2">
