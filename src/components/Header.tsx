@@ -3,9 +3,9 @@
 import { useEffect, useState } from 'react'
 
 const navLinks = [
-  { label: 'AI Chat', href: '#' },
+  { label: 'AI Chat', href: '/chat' },
   { label: 'Study Timer', href: '#', active: true },
-  { label: 'Notes', href: '#' },
+  { label: 'Notes', href: '/notes' },
 ]
 
 export default function Header() {
