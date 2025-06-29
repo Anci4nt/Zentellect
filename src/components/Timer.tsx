@@ -33,7 +33,6 @@ export default function Timer() {
       setHasStarted(true)
       setIsRunning(true)
 
-      // ✅ Create a session in DB
       const res = await fetch('/api/sessions', {
         method: 'POST',
         body: JSON.stringify({ startedAt: new Date().toISOString() }),
@@ -69,34 +68,40 @@ export default function Timer() {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-      <div className={`rounded-xl p-6 shadow-sm flex flex-col items-center justify-center transition-colors duration-300 ${
-        isDark ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'
-      }`}>
-        <div className="text-5xl font-bold mb-2">{format(timeLeft)}</div>
-        <div className={`mb-6 transition-colors duration-300 ${
-          isDark ? 'text-gray-400' : 'text-gray-500'
-        }`}>
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6 px-4 md:px-6">
+      <div
+        className={`rounded-xl p-6 shadow-sm flex flex-col items-center justify-center transition-colors duration-300 ${
+          isDark ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'
+        }`}
+      >
+        <div className="text-4xl sm:text-5xl md:text-6xl font-bold mb-2">
+          {format(timeLeft)}
+        </div>
+        <div
+          className={`mb-6 transition-colors duration-300 text-sm sm:text-base ${
+            isDark ? 'text-gray-400' : 'text-gray-500'
+          }`}
+        >
           Goal: {goal} min
         </div>
-        <div className="flex gap-4">
+        <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4 w-full sm:w-auto">
           <button
             onClick={startTimer}
-            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded shadow transition-colors duration-200"
+            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded shadow transition duration-200 w-full sm:w-auto"
           >
             Start
           </button>
           <button
             onClick={stopTimer}
-            className="bg-yellow-400 hover:bg-yellow-500 text-white px-4 py-2 rounded shadow transition-colors duration-200"
+            className="bg-yellow-400 hover:bg-yellow-500 text-white px-4 py-2 rounded shadow transition duration-200 w-full sm:w-auto"
           >
             Stop
           </button>
           <button
             onClick={resetTimer}
-            className={`px-4 py-2 rounded shadow transition-colors duration-200 ${
-              isDark 
-                ? 'bg-gray-600 hover:bg-gray-700 text-gray-200' 
+            className={`px-4 py-2 rounded shadow transition duration-200 w-full sm:w-auto ${
+              isDark
+                ? 'bg-gray-600 hover:bg-gray-700 text-gray-200'
                 : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
             }`}
           >
@@ -104,6 +109,7 @@ export default function Timer() {
           </button>
         </div>
       </div>
+
       <div className="flex flex-col gap-6">
         <GoalSelector goal={goal} setGoal={setGoal} />
         <Stats />

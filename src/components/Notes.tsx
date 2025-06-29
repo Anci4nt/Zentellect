@@ -25,7 +25,7 @@ type Note = {
 
 export default function NotesPage() {
   const { isDark } = useTheme()
-  
+
   const [notes, setNotes] = useState<Note[]>([])
   const [search, setSearch] = useState('')
   const [showModal, setShowModal] = useState(false)
@@ -119,57 +119,55 @@ export default function NotesPage() {
       } ${note.starred ? 'ring-2 ring-yellow-400' : ''}`}
     >
       <div className="flex justify-between items-start mb-2">
-        <h3 className={`text-lg font-semibold ${
-          isDark ? 'text-white' : 'text-gray-900'
-        }`}>
+        <h3
+          className={`text-lg font-semibold ${
+            isDark ? 'text-white' : 'text-gray-900'
+          }`}
+        >
           {note.title}
         </h3>
         <button onClick={() => toggleStar(note)}>
           <Star
             size={20}
             className={`cursor-pointer transition-colors duration-200 ${
-              note.starred 
-                ? 'text-yellow-400 fill-yellow-400' 
-                : isDark 
-                  ? 'text-gray-500 hover:text-yellow-400' 
-                  : 'text-gray-400 hover:text-yellow-500'
+              note.starred
+                ? 'text-yellow-400 fill-yellow-400'
+                : isDark
+                ? 'text-gray-500 hover:text-yellow-400'
+                : 'text-gray-400 hover:text-yellow-500'
             }`}
           />
         </button>
       </div>
-      <span className={`inline-block text-sm px-3 py-1 rounded-full mb-3 ${
-        isDark 
-          ? 'bg-purple-900 text-purple-300' 
-          : 'bg-purple-100 text-purple-600'
-      }`}>
+      <span
+        className={`inline-block text-sm px-3 py-1 rounded-full mb-3 ${
+          isDark ? 'bg-purple-900 text-purple-300' : 'bg-purple-100 text-purple-600'
+        }`}
+      >
         {note.tag}
       </span>
-      <p className={`text-sm mb-4 ${
-        isDark ? 'text-gray-300' : 'text-gray-700'
-      }`}>
+      <p className={`text-sm mb-4 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
         {note.content}
       </p>
-      <div className={`flex justify-between items-center text-sm ${
-        isDark ? 'text-gray-400' : 'text-gray-500'
-      }`}>
+      <div
+        className={`flex justify-between items-center text-sm ${
+          isDark ? 'text-gray-400' : 'text-gray-500'
+        }`}
+      >
         <span>{note.date}</span>
         <div className="flex gap-3">
           <Pencil
             size={18}
             onClick={() => handleEdit(note)}
             className={`cursor-pointer transition-colors duration-200 ${
-              isDark 
-                ? 'hover:text-purple-400' 
-                : 'hover:text-purple-500'
+              isDark ? 'hover:text-purple-400' : 'hover:text-purple-500'
             }`}
           />
           <Trash2
             size={18}
             onClick={() => handleDelete(note.id)}
             className={`cursor-pointer transition-colors duration-200 ${
-              isDark 
-                ? 'hover:text-red-400' 
-                : 'hover:text-red-500'
+              isDark ? 'hover:text-red-400' : 'hover:text-red-500'
             }`}
           />
         </div>
@@ -178,23 +176,19 @@ export default function NotesPage() {
   )
 
   return (
-    <div className="p-6">
-      <h1 className={`text-3xl font-bold mb-1 ${
-        isDark ? 'text-white' : 'text-gray-900'
-      }`}>
+    <div className="p-4 sm:p-6">
+      <h1 className={`text-2xl sm:text-3xl font-bold mb-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
         Study Notes
       </h1>
-      <p className={`mb-6 ${
-        isDark ? 'text-gray-400' : 'text-gray-600'
-      }`}>
+      <p className={`mb-6 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
         Organize your learning with smart note-taking
       </p>
 
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <input
           type="text"
           placeholder="Search your notes..."
-          className={`w-full max-w-xl p-3 rounded-xl border shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 ${
+          className={`w-full p-3 rounded-xl border shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 ${
             isDark
               ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-500 focus:ring-purple-500'
               : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-purple-500'
@@ -209,7 +203,7 @@ export default function NotesPage() {
             setNewNote({ title: '', tag: '', content: '' })
             setShowModal(true)
           }}
-          className="ml-4 px-5 py-3 bg-purple-500 text-white rounded-xl hover:bg-purple-600 transition-colors duration-200"
+          className="w-full sm:w-auto px-5 py-3 bg-purple-500 text-white rounded-xl hover:bg-purple-600 transition-colors duration-200"
         >
           + New Note
         </button>
@@ -217,35 +211,43 @@ export default function NotesPage() {
 
       {starredNotes.length > 0 && (
         <>
-          <h2 className={`text-xl font-semibold mb-4 flex items-center gap-2 ${
-            isDark ? 'text-white' : 'text-gray-900'
-          }`}>
+          <h2
+            className={`text-xl font-semibold mb-4 flex items-center gap-2 ${
+              isDark ? 'text-white' : 'text-gray-900'
+            }`}
+          >
             ⭐ Starred Notes
           </h2>
-          <div className="grid md:grid-cols-2 gap-4 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
             {starredNotes.map(renderNoteCard)}
           </div>
         </>
       )}
 
-      <h2 className={`text-xl font-semibold mb-4 flex items-center gap-2 ${
-        isDark ? 'text-white' : 'text-gray-900'
-      }`}>
+      <h2
+        className={`text-xl font-semibold mb-4 flex items-center gap-2 ${
+          isDark ? 'text-white' : 'text-gray-900'
+        }`}
+      >
         📖 All Notes
       </h2>
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {normalNotes.map(renderNoteCard)}
       </div>
 
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className={`p-6 rounded-2xl w-full max-w-md shadow-xl ${
-            isDark ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'
-          }`}>
-            <h2 className={`text-xl font-bold mb-4 ${
-              isDark ? 'text-white' : 'text-gray-900'
-            }`}>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div
+            className={`p-6 rounded-2xl w-full max-w-md shadow-xl ${
+              isDark ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'
+            }`}
+          >
+            <h2
+              className={`text-xl font-bold mb-4 ${
+                isDark ? 'text-white' : 'text-gray-900'
+              }`}
+            >
               {isEditing ? 'Edit Note' : 'Create New Note'}
             </h2>
 
@@ -254,8 +256,8 @@ export default function NotesPage() {
               value={newNote.title}
               onChange={(e) => setNewNote({ ...newNote, title: e.target.value })}
               className={`w-full mb-3 p-2 border rounded-md transition-all duration-200 focus:outline-none focus:ring-2 ${
-                isDark 
-                  ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:ring-purple-500' 
+                isDark
+                  ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:ring-purple-500'
                   : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-purple-500'
               }`}
             />
@@ -264,8 +266,8 @@ export default function NotesPage() {
               value={newNote.tag}
               onChange={(e) => setNewNote({ ...newNote, tag: e.target.value })}
               className={`w-full mb-3 p-2 border rounded-md transition-all duration-200 focus:outline-none focus:ring-2 ${
-                isDark 
-                  ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:ring-purple-500' 
+                isDark
+                  ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:ring-purple-500'
                   : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-purple-500'
               }`}
             />
@@ -276,8 +278,8 @@ export default function NotesPage() {
                 setNewNote({ ...newNote, content: e.target.value })
               }
               className={`w-full mb-3 p-2 border rounded-md h-24 transition-all duration-200 focus:outline-none focus:ring-2 ${
-                isDark 
-                  ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:ring-purple-500' 
+                isDark
+                  ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:ring-purple-500'
                   : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-purple-500'
               }`}
             />
@@ -286,9 +288,7 @@ export default function NotesPage() {
               <button
                 onClick={resetModal}
                 className={`px-4 py-2 rounded transition-colors duration-200 ${
-                  isDark 
-                    ? 'text-gray-300 hover:bg-gray-700' 
-                    : 'text-gray-600 hover:bg-gray-100'
+                  isDark ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-600 hover:bg-gray-100'
                 }`}
               >
                 Cancel
