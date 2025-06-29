@@ -7,6 +7,7 @@ import {
   getDocs,
   addDoc,
   updateDoc,
+  deleteDoc,
   doc,
   Timestamp,
 } from 'firebase/firestore'
@@ -25,6 +26,8 @@ export default function NotesPage() {
   const [notes, setNotes] = useState<Note[]>([])
   const [search, setSearch] = useState('')
   const [showModal, setShowModal] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
+  const [editingNoteId, setEditingNoteId] = useState<string | null>(null)
   const [newNote, setNewNote] = useState({ title: '', tag: '', content: '' })
 
   const notesRef = collection(db, 'notes')
@@ -49,16 +52,36 @@ export default function NotesPage() {
     fetchNotes()
   }, [])
 
-  const handleCreateNote = async () => {
+  const handleSaveNote = async () => {
     const today = new Date().toLocaleDateString()
-    await addDoc(notesRef, {
-      ...newNote,
-      starred: false,
-      date: today,
-      createdAt: Timestamp.now(),
-    })
-    setNewNote({ title: '', tag: '', content: '' })
-    setShowModal(false)
+
+    if (isEditing && editingNoteId) {
+      await updateDoc(doc(db, 'notes', editingNoteId), {
+        ...newNote,
+        date: today,
+      })
+    } else {
+      await addDoc(notesRef, {
+        ...newNote,
+        starred: false,
+        date: today,
+        createdAt: Timestamp.now(),
+      })
+    }
+
+    resetModal()
+    fetchNotes()
+  }
+
+  const handleEdit = (note: Note) => {
+    setIsEditing(true)
+    setEditingNoteId(note.id)
+    setNewNote({ title: note.title, tag: note.tag, content: note.content })
+    setShowModal(true)
+  }
+
+  const handleDelete = async (id: string) => {
+    await deleteDoc(doc(db, 'notes', id))
     fetchNotes()
   }
 
@@ -66,6 +89,13 @@ export default function NotesPage() {
     const docRef = doc(db, 'notes', note.id)
     await updateDoc(docRef, { starred: !note.starred })
     fetchNotes()
+  }
+
+  const resetModal = () => {
+    setShowModal(false)
+    setIsEditing(false)
+    setEditingNoteId(null)
+    setNewNote({ title: '', tag: '', content: '' })
   }
 
   const filteredNotes = notes.filter((note) =>
@@ -99,8 +129,16 @@ export default function NotesPage() {
       <div className="flex justify-between items-center text-sm text-gray-500">
         <span>{note.date}</span>
         <div className="flex gap-3">
-          <Pencil size={18} className="cursor-pointer hover:text-purple-500" />
-          <Trash2 size={18} className="cursor-pointer hover:text-red-500" />
+          <Pencil
+            size={18}
+            onClick={() => handleEdit(note)}
+            className="cursor-pointer hover:text-purple-500"
+          />
+          <Trash2
+            size={18}
+            onClick={() => handleDelete(note.id)}
+            className="cursor-pointer hover:text-red-500"
+          />
         </div>
       </div>
     </div>
@@ -120,7 +158,12 @@ export default function NotesPage() {
           onChange={(e) => setSearch(e.target.value)}
         />
         <button
-          onClick={() => setShowModal(true)}
+          onClick={() => {
+            setIsEditing(false)
+            setEditingNoteId(null)
+            setNewNote({ title: '', tag: '', content: '' })
+            setShowModal(true)
+          }}
           className="ml-4 px-5 py-3 bg-purple-500 text-white rounded-xl hover:bg-purple-600 transition"
         >
           + New Note
@@ -149,7 +192,9 @@ export default function NotesPage() {
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-2xl w-full max-w-md shadow-xl">
-            <h2 className="text-xl font-bold mb-4">Create New Note</h2>
+            <h2 className="text-xl font-bold mb-4">
+              {isEditing ? 'Edit Note' : 'Create New Note'}
+            </h2>
 
             <input
               placeholder="Title"
@@ -174,16 +219,16 @@ export default function NotesPage() {
 
             <div className="flex justify-end gap-3">
               <button
-                onClick={() => setShowModal(false)}
+                onClick={resetModal}
                 className="text-gray-600 px-4 py-2 rounded hover:bg-gray-100"
               >
                 Cancel
               </button>
               <button
-                onClick={handleCreateNote}
+                onClick={handleSaveNote}
                 className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600"
               >
-                Create
+                {isEditing ? 'Save Changes' : 'Create'}
               </button>
             </div>
           </div>
@@ -192,4 +237,3 @@ export default function NotesPage() {
     </div>
   )
 }
- 
