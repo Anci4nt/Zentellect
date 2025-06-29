@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useTheme } from '@/contexts/ThemeContext'
 import GoalSelector from './GoalSelector'
 import Stats from './Stats'
 
@@ -10,6 +11,7 @@ export default function Timer() {
   const [isRunning, setIsRunning] = useState(false)
   const [hasStarted, setHasStarted] = useState(false)
   const [sessionId, setSessionId] = useState<string | null>(null)
+  const { isDark } = useTheme()
 
   useEffect(() => {
     let timer: NodeJS.Timeout
@@ -68,25 +70,35 @@ export default function Timer() {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-      <div className="bg-white rounded-xl p-6 shadow-sm flex flex-col items-center justify-center">
+      <div className={`rounded-xl p-6 shadow-sm flex flex-col items-center justify-center transition-colors duration-300 ${
+        isDark ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'
+      }`}>
         <div className="text-5xl font-bold mb-2">{format(timeLeft)}</div>
-        <div className="text-gray-500 mb-6">Goal: {goal} min</div>
+        <div className={`mb-6 transition-colors duration-300 ${
+          isDark ? 'text-gray-400' : 'text-gray-500'
+        }`}>
+          Goal: {goal} min
+        </div>
         <div className="flex gap-4">
           <button
             onClick={startTimer}
-            className="bg-green-500 text-white px-4 py-2 rounded shadow"
+            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded shadow transition-colors duration-200"
           >
             Start
           </button>
           <button
             onClick={stopTimer}
-            className="bg-yellow-400 text-white px-4 py-2 rounded shadow"
+            className="bg-yellow-400 hover:bg-yellow-500 text-white px-4 py-2 rounded shadow transition-colors duration-200"
           >
             Stop
           </button>
           <button
             onClick={resetTimer}
-            className="bg-gray-100 text-gray-700 px-4 py-2 rounded shadow"
+            className={`px-4 py-2 rounded shadow transition-colors duration-200 ${
+              isDark 
+                ? 'bg-gray-600 hover:bg-gray-700 text-gray-200' 
+                : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+            }`}
           >
             Reset
           </button>
