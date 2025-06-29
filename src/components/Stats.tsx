@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useTheme } from '@/contexts/ThemeContext'
 
 function formatTime(ms: number): string {
   const totalSeconds = Math.floor(ms / 1000)
@@ -15,6 +16,7 @@ export default function Stats() {
     totalTime: 0,
     currentDuration: 0,
   })
+  const { isDark } = useTheme()
 
   const fetchStats = async () => {
     const res = await fetch('/api/stats')
@@ -29,20 +31,22 @@ export default function Stats() {
   }, [])
 
   return (
-    <div className="bg-white rounded-xl p-6 shadow-sm">
+    <div className={`rounded-xl p-6 shadow-sm transition-colors duration-300 ${
+      isDark ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'
+    }`}>
       <h3 className="font-semibold text-lg mb-4">🏆 Study Stats</h3>
       <div className="space-y-2 text-sm">
         <div className="flex justify-between">
-          <span>Sessions Completed Today</span>
-          <span>{stats.totalSessions}</span>
+          <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>Sessions Completed Today</span>
+          <span className="font-medium">{stats.totalSessions}</span>
         </div>
         <div className="flex justify-between">
-          <span>Current Session</span>
-          <span>{formatTime(stats.currentDuration)}</span>
+          <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>Current Session</span>
+          <span className="font-medium">{formatTime(stats.currentDuration)}</span>
         </div>
         <div className="flex justify-between">
-          <span>Total Study Time Today</span>
-          <span>{formatTime(stats.totalTime)}</span>
+          <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>Total Study Time Today</span>
+          <span className="font-medium">{formatTime(stats.totalTime)}</span>
         </div>
       </div>
     </div>

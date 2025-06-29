@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useTheme } from '@/contexts/ThemeContext'
 import { db } from '@/lib/firebase'
 import {
   collection,
@@ -23,6 +24,8 @@ type Note = {
 }
 
 export default function NotesPage() {
+  const { isDark } = useTheme()
+  
   const [notes, setNotes] = useState<Note[]>([])
   const [search, setSearch] = useState('')
   const [showModal, setShowModal] = useState(false)
@@ -99,7 +102,9 @@ export default function NotesPage() {
   }
 
   const filteredNotes = notes.filter((note) =>
-    note.title.toLowerCase().includes(search.toLowerCase())
+    [note.title, note.tag, note.content].some((field) =>
+      field.toLowerCase().includes(search.toLowerCase())
+    )
   )
   const starredNotes = filteredNotes.filter((note) => note.starred)
   const normalNotes = filteredNotes.filter((note) => !note.starred)
@@ -107,37 +112,65 @@ export default function NotesPage() {
   const renderNoteCard = (note: Note) => (
     <div
       key={note.id}
-      className={`bg-white rounded-2xl p-5 shadow border border-gray-100 transition hover:shadow-md ${
-        note.starred ? 'ring-2 ring-yellow-400' : ''
-      }`}
+      className={`rounded-2xl p-5 shadow border transition-all duration-200 hover:shadow-md ${
+        isDark
+          ? 'bg-gray-800 border-gray-700 text-gray-100 hover:bg-gray-750'
+          : 'bg-white border-gray-100 text-gray-900 hover:bg-gray-50'
+      } ${note.starred ? 'ring-2 ring-yellow-400' : ''}`}
     >
       <div className="flex justify-between items-start mb-2">
-        <h3 className="text-lg font-semibold">{note.title}</h3>
+        <h3 className={`text-lg font-semibold ${
+          isDark ? 'text-white' : 'text-gray-900'
+        }`}>
+          {note.title}
+        </h3>
         <button onClick={() => toggleStar(note)}>
           <Star
             size={20}
-            className={`cursor-pointer transition ${
-              note.starred ? 'text-yellow-400 fill-yellow-400' : 'text-gray-400'
+            className={`cursor-pointer transition-colors duration-200 ${
+              note.starred 
+                ? 'text-yellow-400 fill-yellow-400' 
+                : isDark 
+                  ? 'text-gray-500 hover:text-yellow-400' 
+                  : 'text-gray-400 hover:text-yellow-500'
             }`}
           />
         </button>
       </div>
-      <span className="inline-block bg-purple-100 text-purple-600 text-sm px-3 py-1 rounded-full mb-3">
+      <span className={`inline-block text-sm px-3 py-1 rounded-full mb-3 ${
+        isDark 
+          ? 'bg-purple-900 text-purple-300' 
+          : 'bg-purple-100 text-purple-600'
+      }`}>
         {note.tag}
       </span>
-      <p className="text-gray-700 text-sm mb-4">{note.content}</p>
-      <div className="flex justify-between items-center text-sm text-gray-500">
+      <p className={`text-sm mb-4 ${
+        isDark ? 'text-gray-300' : 'text-gray-700'
+      }`}>
+        {note.content}
+      </p>
+      <div className={`flex justify-between items-center text-sm ${
+        isDark ? 'text-gray-400' : 'text-gray-500'
+      }`}>
         <span>{note.date}</span>
         <div className="flex gap-3">
           <Pencil
             size={18}
             onClick={() => handleEdit(note)}
-            className="cursor-pointer hover:text-purple-500"
+            className={`cursor-pointer transition-colors duration-200 ${
+              isDark 
+                ? 'hover:text-purple-400' 
+                : 'hover:text-purple-500'
+            }`}
           />
           <Trash2
             size={18}
             onClick={() => handleDelete(note.id)}
-            className="cursor-pointer hover:text-red-500"
+            className={`cursor-pointer transition-colors duration-200 ${
+              isDark 
+                ? 'hover:text-red-400' 
+                : 'hover:text-red-500'
+            }`}
           />
         </div>
       </div>
@@ -146,14 +179,26 @@ export default function NotesPage() {
 
   return (
     <div className="p-6">
-      <h1 className="text-3xl font-bold mb-1">Study Notes</h1>
-      <p className="text-gray-600 mb-6">Organize your learning with smart note-taking</p>
+      <h1 className={`text-3xl font-bold mb-1 ${
+        isDark ? 'text-white' : 'text-gray-900'
+      }`}>
+        Study Notes
+      </h1>
+      <p className={`mb-6 ${
+        isDark ? 'text-gray-400' : 'text-gray-600'
+      }`}>
+        Organize your learning with smart note-taking
+      </p>
 
       <div className="flex justify-between items-center mb-6">
         <input
           type="text"
           placeholder="Search your notes..."
-          className="w-full max-w-xl p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-400 transition"
+          className={`w-full max-w-xl p-3 rounded-xl border shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 ${
+            isDark
+              ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-500 focus:ring-purple-500'
+              : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-purple-500'
+          }`}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
@@ -164,7 +209,7 @@ export default function NotesPage() {
             setNewNote({ title: '', tag: '', content: '' })
             setShowModal(true)
           }}
-          className="ml-4 px-5 py-3 bg-purple-500 text-white rounded-xl hover:bg-purple-600 transition"
+          className="ml-4 px-5 py-3 bg-purple-500 text-white rounded-xl hover:bg-purple-600 transition-colors duration-200"
         >
           + New Note
         </button>
@@ -172,7 +217,9 @@ export default function NotesPage() {
 
       {starredNotes.length > 0 && (
         <>
-          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+          <h2 className={`text-xl font-semibold mb-4 flex items-center gap-2 ${
+            isDark ? 'text-white' : 'text-gray-900'
+          }`}>
             ⭐ Starred Notes
           </h2>
           <div className="grid md:grid-cols-2 gap-4 mb-8">
@@ -181,7 +228,9 @@ export default function NotesPage() {
         </>
       )}
 
-      <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+      <h2 className={`text-xl font-semibold mb-4 flex items-center gap-2 ${
+        isDark ? 'text-white' : 'text-gray-900'
+      }`}>
         📖 All Notes
       </h2>
       <div className="grid md:grid-cols-2 gap-4">
@@ -191,8 +240,12 @@ export default function NotesPage() {
       {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-2xl w-full max-w-md shadow-xl">
-            <h2 className="text-xl font-bold mb-4">
+          <div className={`p-6 rounded-2xl w-full max-w-md shadow-xl ${
+            isDark ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'
+          }`}>
+            <h2 className={`text-xl font-bold mb-4 ${
+              isDark ? 'text-white' : 'text-gray-900'
+            }`}>
               {isEditing ? 'Edit Note' : 'Create New Note'}
             </h2>
 
@@ -200,13 +253,21 @@ export default function NotesPage() {
               placeholder="Title"
               value={newNote.title}
               onChange={(e) => setNewNote({ ...newNote, title: e.target.value })}
-              className="w-full mb-3 p-2 border rounded-md"
+              className={`w-full mb-3 p-2 border rounded-md transition-all duration-200 focus:outline-none focus:ring-2 ${
+                isDark 
+                  ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:ring-purple-500' 
+                  : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-purple-500'
+              }`}
             />
             <input
               placeholder="Tag"
               value={newNote.tag}
               onChange={(e) => setNewNote({ ...newNote, tag: e.target.value })}
-              className="w-full mb-3 p-2 border rounded-md"
+              className={`w-full mb-3 p-2 border rounded-md transition-all duration-200 focus:outline-none focus:ring-2 ${
+                isDark 
+                  ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:ring-purple-500' 
+                  : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-purple-500'
+              }`}
             />
             <textarea
               placeholder="Content"
@@ -214,19 +275,27 @@ export default function NotesPage() {
               onChange={(e) =>
                 setNewNote({ ...newNote, content: e.target.value })
               }
-              className="w-full mb-3 p-2 border rounded-md h-24"
+              className={`w-full mb-3 p-2 border rounded-md h-24 transition-all duration-200 focus:outline-none focus:ring-2 ${
+                isDark 
+                  ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:ring-purple-500' 
+                  : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-purple-500'
+              }`}
             />
 
             <div className="flex justify-end gap-3">
               <button
                 onClick={resetModal}
-                className="text-gray-600 px-4 py-2 rounded hover:bg-gray-100"
+                className={`px-4 py-2 rounded transition-colors duration-200 ${
+                  isDark 
+                    ? 'text-gray-300 hover:bg-gray-700' 
+                    : 'text-gray-600 hover:bg-gray-100'
+                }`}
               >
                 Cancel
               </button>
               <button
                 onClick={handleSaveNote}
-                className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600"
+                className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 transition-colors duration-200"
               >
                 {isEditing ? 'Save Changes' : 'Create'}
               </button>
