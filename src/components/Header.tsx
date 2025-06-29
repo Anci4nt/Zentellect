@@ -1,16 +1,16 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-
+import { usePathname } from 'next/navigation'
 const navLinks = [
-  { label: 'AI Chat', href: '/chat' },
-  { label: 'Study Timer', href: '#', active: true },
-  { label: 'Notes', href: '/notes' },
+  { label: 'AI Chat', href: '/chat', active: false},
+  { label: 'Study Timer', href: '/', active: false },
+  { label: 'Notes', href: '/note', active: false },
 ]
 
 export default function Header() {
   const [mounted, setMounted] = useState(false)
-
+  const pathname = usePathname();
   useEffect(() => {
     const timeout = setTimeout(() => setMounted(true), 100)
     return () => clearTimeout(timeout)
@@ -33,24 +33,23 @@ export default function Header() {
 
         {/* Nav */}
         <nav className="flex gap-4 md:gap-6 text-sm font-medium">
-          {navLinks.map((link, i) => (
-            <a
-              key={link.label}
-              href={link.href}
-              className={`relative px-3 py-1 rounded-lg transition-all duration-300 ease-in-out transform 
-                ${
-                  mounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'
-                } delay-[${i * 100}ms] 
-                ${
-                  link.active
-                    ? 'bg-orange-100 text-orange-600 font-semibold'
-                    : 'text-gray-600 hover:text-green-700 hover:bg-green-100 hover:scale-105'
-                }`}
-            >
-              {link.label}
-            </a>
-          ))}
-        </nav>
+      {navLinks.map((link, i) => (
+        <a
+          key={link.label}
+          href={link.href}
+          className={`relative px-3 py-1 rounded-lg transition-all duration-300 ease-in-out transform 
+            ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'}
+            delay-[${i * 100}ms]
+            ${
+              pathname === link.href
+                ? 'bg-orange-100 text-orange-600 font-semibold'
+                : 'text-gray-600 hover:text-green-700 hover:bg-green-100 hover:scale-105'
+            }`}
+        >
+          {link.label}
+        </a>
+      ))}
+    </nav>
 
         {/* Online Badge */}
         <div className="hidden md:flex items-center gap-1 text-green-600 font-semibold text-sm">
