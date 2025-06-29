@@ -104,11 +104,7 @@ export default function Header() {
         {/* Theme Toggle and Online Badge */}
         <div className="flex items-center gap-4">
           <ThemeToggle />
-          <div className={`hidden md:flex items-center gap-1 font-semibold text-sm transition-colors duration-300 ${
-            isDark ? 'text-green-400' : 'text-green-600'
-          }`}>
-            <span className="text-lg">●</span> Online
-          </div>
+         
         </div>
       </div>
     </header>
