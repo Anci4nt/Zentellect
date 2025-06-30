@@ -10,6 +10,7 @@ export default function Timer() {
   const [timeLeft, setTimeLeft] = useState(0)
   const [isRunning, setIsRunning] = useState(false)
   const [hasStarted, setHasStarted] = useState(false)
+  const [hasEnded, setHasEnded] = useState(false)
   const [sessionId, setSessionId] = useState<string | null>(null)
   const { isDark } = useTheme()
 
@@ -46,7 +47,8 @@ export default function Timer() {
   }
 
   const endSession = async () => {
-    if (sessionId) {
+    if (sessionId && !hasEnded) {
+      setHasEnded(true)
       await fetch(`/api/sessions/${sessionId}`, {
         method: 'PATCH',
         body: JSON.stringify({ endedAt: new Date().toISOString() }),
@@ -55,15 +57,16 @@ export default function Timer() {
     }
   }
 
-  const stopTimer = () => {
+  const stopTimer = async () => {
     setIsRunning(false)
-    endSession()
+    await endSession()
   }
 
   const resetTimer = () => {
     setTimeLeft(0)
     setIsRunning(false)
     setHasStarted(false)
+    setHasEnded(false)
     setSessionId(null)
   }
 
