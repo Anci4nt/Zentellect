@@ -15,7 +15,6 @@ export default function ScanPage() {
     if (file) setImage(file);
   };
 
-  // Fix common OCR issues
   const correctOcrErrors = (text: string): string => {
     const corrections: Record<string, string> = {
       "ight": "light",
