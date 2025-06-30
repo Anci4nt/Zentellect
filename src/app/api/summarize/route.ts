@@ -9,7 +9,7 @@ let dictionary: Typo;
 try {
   const aff = fs.readFileSync(path.resolve("./public/dictionaries/en_US/en_US.aff"), "utf-8");
   const dic = fs.readFileSync(path.resolve("./public/dictionaries/en_US/en_US.dic"), "utf-8");
-  dictionary = new Typo("en_US", aff, dic, { platform: "any" });
+  dictionary = new Typo("en_US", aff, dic, );
 } catch (err) {
   console.error("❌ Failed to load Typo.js dictionary:", err);
 }
@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
     const hfResponse = await fetch("https://api-inference.huggingface.co/models/facebook/bart-large-cnn", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${process.env.HF_API_KEY}`,
+        Authorization: `Bearer ${process.env.HF_TOKEN}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ inputs: correctedText }),
