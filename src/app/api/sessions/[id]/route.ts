@@ -11,7 +11,7 @@ export async function PATCH(req: NextRequest) {
     const id = url.pathname.split('/').pop()
 
     if (!id) {
-      return NextResponse.json({ error: 'Missing session ID in URL' }, { status: 400 })
+      return NextResponse.json({ error: 'Missing session ID' }, { status: 400 })
     }
 
     const session = await prisma.studySession.update({
