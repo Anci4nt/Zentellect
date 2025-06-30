@@ -6,7 +6,6 @@ const prisma = new PrismaClient()
 export async function PATCH(req: NextRequest) {
   try {
     const { endedAt } = await req.json()
-
     const url = new URL(req.url)
     const id = url.pathname.split('/').pop()
 
