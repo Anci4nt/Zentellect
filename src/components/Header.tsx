@@ -9,6 +9,7 @@ const navLinks = [
   { label: 'AI Chat', href: '/chat', active: false },
   { label: 'Study Timer', href: '/', active: false },
   { label: 'Notes', href: '/note', active: false },
+  { label: 'Scan', href: '/scan', active: false },
 ]
 const newNavLinks = [
   
