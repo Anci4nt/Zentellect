@@ -48,7 +48,6 @@ export default function Chatbot() {
         ? 'bg-gray-900 text-white' 
         : 'bg-gray-50 text-gray-900'
     }`}>
-      {/* CHAT AREA */}
       <div className={`flex-1 overflow-y-auto mb-10 h-[300px] p-5 rounded-2xl space-y-4 border shadow transition-colors duration-300 ${
         isDark 
           ? 'bg-gray-800 border-gray-700' 
@@ -74,7 +73,6 @@ export default function Chatbot() {
         ))}
       </div>
 
-      {/* INPUT AREA AT BOTTOM */}
       <form
         onSubmit={(e) => {
           e.preventDefault()

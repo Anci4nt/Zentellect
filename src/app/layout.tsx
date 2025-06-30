@@ -14,8 +14,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "StudyAI",
+  title: "Zentellect",
   description: "Your learning companion",
+  icons: {
+    icon: "/image.png", 
+  },
 };
 
 export default function RootLayout({

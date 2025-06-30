@@ -11,7 +11,7 @@ export default function Signup() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { isDark } = useTheme()
-  // Email Sign-Up
+  
   const signUpWithEmail = async (email, password) => {
     
     setError("");
@@ -26,7 +26,7 @@ export default function Signup() {
     }
   };
 
-  // Google Sign-Up (or Sign-In if already exists)
+
   const signUpWithGoogle = async () => {
     setError("");
     try {

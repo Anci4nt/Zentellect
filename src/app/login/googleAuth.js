@@ -1,6 +1,6 @@
 'use client'
-
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation' // Import router for redirect
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
 import { auth } from '@/lib/firebase'
 
@@ -9,6 +9,7 @@ const provider = new GoogleAuthProvider()
 export default function GoogleButton() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const router = useRouter() // Initialize router
 
   const signInWithGoogle = async () => {
     setError('')
@@ -16,6 +17,10 @@ export default function GoogleButton() {
     try {
       const result = await signInWithPopup(auth, provider)
       console.log('Google login success:', result.user)
+      
+      // Redirect to main page after successful login
+      router.push('/') // Change '/main' to your desired route
+      
     } catch (err) {
       if (err.code === 'auth/popup-closed-by-user') {
         console.info('Popup closed by user.')

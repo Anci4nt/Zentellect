@@ -49,7 +49,7 @@ export default function GoalSelector({ goal, setGoal }: Props) {
                   : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
             }`}
           >
-            {val}m
+            {val}
           </button>
         ))}
       </div>

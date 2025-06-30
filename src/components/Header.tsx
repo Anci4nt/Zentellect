@@ -9,6 +9,7 @@ const navLinks = [
   { label: 'AI Chat', href: '/chat', active: false },
   { label: 'Study Timer', href: '/', active: false },
   { label: 'Notes', href: '/note', active: false },
+  { label: 'Scan', href: '/scan', active: false },
 ]
 const newNavLinks = [
   
@@ -35,7 +36,6 @@ export default function Header() {
       }`}
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-4 transition-all duration-700 ease-out">
-        {/* Logo & Title */}
         <div className="flex items-center gap-3">
           <div
             className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg font-bold shadow-sm transition-colors duration-300 ${
@@ -50,7 +50,7 @@ export default function Header() {
                 isDark ? 'text-white' : 'text-gray-900'
               }`}
             >
-              StudyAI
+              Zentellect
             </h1>
             <p
               className={`text-xs -mt-1 transition-colors duration-300 ${
@@ -62,7 +62,6 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Nav */}
         <nav className="flex flex-wrap justify-center gap-3 sm:gap-4 md:gap-6 text-sm font-medium">
           {navLinks.map((link, i) => (
             <a
@@ -108,7 +107,6 @@ export default function Header() {
           ))}
         </nav>
 
-        {/* Theme Toggle and Online Badge */}
         <div className="flex items-center justify-between w-full md:w-auto gap-4">
           <ThemeToggle />
         </div>
