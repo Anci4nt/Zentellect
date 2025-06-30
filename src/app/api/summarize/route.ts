@@ -3,7 +3,7 @@ import Typo from "typo-js";
 import fs from "fs";
 import path from "path";
 
-// Load Typo.js dictionary once
+
 let dictionary: Typo;
 
 try {
@@ -14,7 +14,7 @@ try {
   console.error("❌ Failed to load Typo.js dictionary:", err);
 }
 
-// Spell correct function
+
 function spellCorrect(text: string) {
   return text.split(/\b/).map(word => {
     if (dictionary && !dictionary.check(word) && /^[a-zA-Z]+$/.test(word)) {
@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify({ inputs: correctedText }),
     });
 
-    const data = await hfResponse.json(); // ✅ Only use this once
+    const data = await hfResponse.json(); 
 
     if (!hfResponse.ok) {
       console.error("❌ HuggingFace error:", data);
