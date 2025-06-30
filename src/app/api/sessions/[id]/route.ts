@@ -3,12 +3,18 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(req: NextRequest) {
   try {
     const { endedAt } = await req.json()
+    const url = new URL(req.url)
+    const id = url.pathname.split('/').pop()
+
+    if (!id) {
+      return NextResponse.json({ error: 'Missing session ID' }, { status: 400 })
+    }
 
     const session = await prisma.studySession.update({
-      where: { id: Number(params.id) },
+      where: { id: Number(id) },
       data: { endedAt: new Date(endedAt) },
     })
 
