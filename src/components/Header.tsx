@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { useTheme } from '@/contexts/ThemeContext'
 import ThemeToggle from './ThemeToggle'
-
+import Image from 'next/image';
 const navLinks = [
   { label: 'AI Chat', href: '/chat', active: false },
   { label: 'Study Timer', href: '/', active: false },
@@ -21,7 +21,7 @@ export default function Header() {
   const [mounted, setMounted] = useState(false)
   const pathname = usePathname()
   const { isDark } = useTheme()
-
+  
   useEffect(() => {
     const timeout = setTimeout(() => setMounted(true), 100)
     return () => clearTimeout(timeout)
@@ -37,13 +37,7 @@ export default function Header() {
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-4 transition-all duration-700 ease-out">
         <div className="flex items-center gap-3">
-          <div
-            className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg font-bold shadow-sm transition-colors duration-300 ${
-              isDark ? 'bg-green-700 text-white' : 'bg-green-800 text-white'
-            }`}
-          >
-            🧠
-          </div>
+          <Image src={"/zentellect.png"} alt='logo' width={30} height={30} priority/>
           <div>
             <h1
               className={`text-xl font-semibold transition-colors duration-300 ${
@@ -57,7 +51,7 @@ export default function Header() {
                 isDark ? 'text-gray-400' : 'text-gray-500'
               }`}
             >
-              Your learning companion
+              Summarize and gamify your learning with AI.
             </p>
           </div>
         </div>
