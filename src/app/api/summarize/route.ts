@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
     const correctedText = spellCorrect(text);
     console.log("✅ Corrected text:", correctedText);
 
-    const hfResponse = await fetch("https://api-inference.huggingface.co/models/facebook/bart-large-cnn", {
+    const hfResponse = await fetch("https://api-inference.huggingface.co/models/sshleifer/distilbart-cnn-12-6", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${process.env.HF_TOKEN}`,
@@ -42,7 +42,15 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify({ inputs: correctedText }),
     });
 
-    const data = await hfResponse.json(); 
+    const rawText = await hfResponse.text();
+
+    let data;
+    try {
+      data = JSON.parse(rawText);
+    } catch (e) {
+      console.error("❌ HuggingFace returned non-JSON:", rawText);
+      return NextResponse.json({ summary: "Invalid response from HuggingFace." }, { status: 500 });
+    }
 
     if (!hfResponse.ok) {
       console.error("❌ HuggingFace error:", data);
@@ -54,6 +62,7 @@ export async function POST(req: NextRequest) {
       : data?.summary_text || "Failed to summarize.";
 
     return NextResponse.json({ summary });
+
   } catch (error) {
     console.error("🔥 Summarization error:", error);
     return NextResponse.json({ summary: "Failed to summarize." }, { status: 500 });
